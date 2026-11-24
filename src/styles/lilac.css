@@ -1,0 +1,252 @@
+/*
+ * Lilac Citrus skin, loaded last.
+ *
+ *   palette     ice #f7f4fb · glacier blue #7b4bd6 · slate #241a33 · coral #c6e83a
+ *   motion      blur-to-focus: content sharpens out of a soft blur as it scrolls in
+ *   hover       spotlight: a cool light follows the cursor across cards, with a glacier ring
+ *   atmosphere  a faint dot grid that drifts slowly with scroll
+ *   type        large headings arrive as a glacier outline that fills with ink
+ *
+ * Visual only: no layout, sizes, content or order change. Colours are remapped at build time
+ * (scripts/variants/lilac.mjs); classes prefixed li- are added by scripts/lilac.js.
+ */
+
+:root {
+  --li-ice: #f7f4fb;
+  --li-ice2: #efe9f7;
+  --li-glacier: #7b4bd6;
+  --li-glacier-deep: #5f33b8;
+  --li-slate: #241a33;
+  --li-coral: #c6e83a;
+
+  --li-fg: #241a33;
+  --li-fg2: #33264a;
+  --li-white: #241a33;
+  --li-muted: #65587a;
+  --li-accent: #5f33b8;
+  --li-accent2: #3a2463;
+  --li-deep: #3a2463;
+  --li-hot: #5d7a00;
+  --li-line: rgba(36, 26, 51, .14);
+  --li-line2: rgba(36, 26, 51, .3);
+  --li-glow: #7b4bd6;
+
+  --li-ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+/* ---------- base ---------------------------------------------------------- */
+html { scrollbar-color: var(--li-glacier) var(--li-ice2); }
+body { background-color: var(--li-ice); color: var(--li-fg); }
+::selection { background: rgba(123, 75, 214, .28); color: var(--li-slate); }
+:focus-visible { outline: 2px solid var(--li-glacier) !important; outline-offset: 3px; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--li-ice2); }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--li-glacier), #b394f0); border: 3px solid var(--li-ice2); border-radius: 12px; }
+hr { border-color: var(--li-line) !important; }
+blockquote { border-left-color: var(--li-glacier) !important; }
+
+/* ---------- typography: outline-to-fill headings ---------------------------- */
+/* the stroke and fill are paint only: glyph metrics and line boxes never change */
+.li-ink { -webkit-text-stroke-width: 1.2px; }
+@keyframes li-ink {
+  0%, 30% { -webkit-text-fill-color: transparent; -webkit-text-stroke-color: var(--li-glacier); }
+  100%    { -webkit-text-fill-color: currentColor; -webkit-text-stroke-color: transparent; }
+}
+
+/* body links: a cool underline that draws in */
+.li-prose-link {
+  text-decoration: none !important;
+  background-image: linear-gradient(var(--li-glacier), var(--li-glacier)), linear-gradient(var(--li-line2), var(--li-line2)) !important;
+  background-repeat: no-repeat !important;
+  background-size: 0% 1.5px, 100% 1px !important;
+  background-position: 0 100%, 0 100% !important;
+  transition: background-size .45s var(--li-ease), color .2s;
+}
+.li-prose-link:hover { color: var(--li-accent) !important; background-size: 100% 1.5px, 100% 1px !important; }
+.hwf-col-list a, #hwnav .hw-list > li > a, #hwnav .hw-link { transition: color .2s, text-shadow .3s; }
+.hwf-col-list a:hover, #hwnav .hw-list > li > a:hover, #hwnav .hw-link:hover { color: var(--li-glacier) !important; text-shadow: 0 0 14px rgba(123, 75, 214, .35); }
+
+/* ---------- buttons: lilaced lift ------------------------------------------- */
+.li-btn, #hwnav .hw-btn, .elementor-button, .hs-button, input[type="submit"], button[type="submit"] {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 8px 22px -14px color-mix(in srgb, var(--li-glow) 85%, transparent) !important;
+  transition: translate .35s var(--li-ease), box-shadow .35s var(--li-ease), filter .3s, background-color .25s, color .25s !important;
+}
+.li-btn:hover, #hwnav .hw-btn:hover, .elementor-button:hover, .hs-button:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+  translate: 0 -2px;
+  filter: saturate(1.08) brightness(1.04);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 0 0 3px color-mix(in srgb, var(--li-glow) 25%, transparent),
+    0 16px 30px -14px color-mix(in srgb, var(--li-glow) 90%, transparent) !important;
+}
+.li-btn:active, .elementor-button:active, input[type="submit"]:active, button[type="submit"]:active { translate: 0 0; filter: brightness(.96); }
+.li-btn svg, .li-btn i, .elementor-button svg, .elementor-button i { transition: translate .35s var(--li-ease); }
+.li-btn:hover svg, .li-btn:hover i, .elementor-button:hover svg, .elementor-button:hover i { translate: 3px 0; }
+.li-pill { transition: box-shadow .3s var(--li-ease), background-color .3s, color .3s; }
+a.li-pill:hover, button.li-pill:hover { box-shadow: 0 0 0 2px rgba(123, 75, 214, .5) !important; }
+
+/* ---------- form fields ----------------------------------------------------- */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="hidden"]):not([type="file"]):not([type="image"]),
+textarea, select { transition: box-shadow .3s var(--li-ease), border-color .3s; caret-color: var(--li-glacier); }
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]):not([type="hidden"]):not([type="file"]):not([type="image"]):focus,
+textarea:focus, select:focus {
+  outline: 0 !important; border-color: var(--li-glacier) !important;
+  box-shadow: 0 0 0 4px rgba(123, 75, 214, .16) !important;
+}
+
+/* ---------- cards: spotlight ------------------------------------------------- */
+.li-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 14px 30px -26px rgba(40, 20, 70, .45);
+  transition: box-shadow .45s var(--li-ease), border-color .4s;
+}
+.li-card.li-hot:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 0 0 1px rgba(123, 75, 214, .5), 0 0 26px -8px rgba(123, 75, 214, .45),
+    0 26px 44px -26px rgba(40, 20, 70, .4) !important;
+}
+/* the light follows the pointer (li-spot, positions from lilac.js) */
+.li-card.li-spot {
+  background-image: radial-gradient(380px circle at var(--li-mx, 50%) var(--li-my, 50%), rgba(123, 75, 214, .13), rgba(179, 148, 240, .05) 45%, transparent 70%) !important;
+}
+.li-img { transition: filter .6s var(--li-ease); }
+a:hover .li-img, .li-img:hover { filter: saturate(1.05) brightness(1.05) hue-rotate(-6deg); }
+
+/* sections drawn over dark photography keep light ink (set by lilac.js) */
+.li-darkzone {
+  --li-fg: #f7f4fb !important; --li-fg2: #ece6f4 !important; --li-white: #f7f4fb !important; --li-muted: #d4cbe2 !important;
+  --li-accent: #c3a8f5 !important; --li-accent2: #e0d6f2 !important; --li-deep: #e0d6f2 !important; --li-hot: #d6f06a !important;
+  --li-line: rgba(247, 244, 251, .2) !important; --li-line2: rgba(247, 244, 251, .36) !important; --li-glow: #c3a8f5 !important;
+}
+/* background film is lilaced into a pale ice glow so ink reads on it */
+.li-sunwash { filter: invert(1) hue-rotate(240deg) saturate(.8) brightness(1.06) contrast(.78) !important; opacity: .6; }
+.li-sunwash ~ canvas { filter: invert(.1) hue-rotate(0deg) saturate(1.2); }
+
+/* white logos on transparent backgrounds are inked onto the ice */
+.li-inv, .li-inv-force { filter: brightness(0) opacity(.75) !important; }
+.li-darkzone .li-inv, .li-darkzone .li-inv-force { filter: none !important; }
+html body .hwts.hwts.hwts { --hwts-logo-filter: brightness(0) opacity(.7) !important; --hwts-line: rgba(36, 26, 51, .12) !important; }
+
+/* ---------- site chrome ------------------------------------------------------- */
+#hwnav .hw-bar { box-shadow: 0 1px 0 var(--li-line), 0 10px 30px -24px rgba(40, 20, 70, .45) !important; backdrop-filter: saturate(1.2); }
+#hwnav .hw-panel { box-shadow: 0 0 0 1px var(--li-line), 0 40px 70px -34px rgba(40, 20, 70, .5) !important; }
+.hw-ann { box-shadow: inset 0 -1px 0 rgba(36, 26, 51, .12); }
+.hwf-soc { transition: box-shadow .35s var(--li-ease), color .2s; }
+.hwf-soc:hover { box-shadow: 0 0 0 2px var(--li-glacier), 0 0 18px -4px rgba(123, 75, 214, .6); }
+
+/* ---------- reveals: blur-to-focus ----------------------------------------------- */
+.li-wait { opacity: 0 !important; }
+.li-in { animation-duration: 1s; animation-timing-function: var(--li-ease); animation-fill-mode: both; animation-delay: var(--li-d, 0ms); }
+.li-in.li-fx-rise { animation-name: li-focus; animation-duration: 1.2s; }
+.li-in.li-fx-up { animation-name: li-focus-up; }
+.li-in.li-fx-photo { animation-name: li-focus-photo; animation-duration: 1.2s; }
+.li-in.li-fx-rise.li-ink { animation-name: li-focus, li-ink; animation-duration: 1.2s, 1.2s; }
+
+@keyframes li-focus {
+  from { opacity: 0; filter: blur(14px); scale: .985; }
+  to   { opacity: 1; filter: blur(0); scale: 1; }
+}
+@keyframes li-focus-up {
+  from { opacity: 0; filter: blur(10px); translate: 0 18px; }
+  to   { opacity: 1; filter: blur(0); translate: 0 0; }
+}
+@keyframes li-focus-photo {
+  from { opacity: 0; filter: blur(18px) saturate(.4) brightness(1.15); scale: 1.04; }
+  to   { opacity: 1; filter: none; scale: 1; }
+}
+.li-hero-rise { animation: li-focus 1.4s var(--li-ease) .1s both; }
+.li-hero-rise.li-ink { animation: li-focus 1.4s var(--li-ease) .1s both, li-ink 1.4s var(--li-ease) .1s both; }
+
+/* ---------- dot grid (injected, aria-hidden, non-interactive) ----------------------- */
+.li-grain {
+  position: fixed; inset: 0; pointer-events: none; z-index: 2147482000;
+  background-image: radial-gradient(circle at 1px 1px, rgba(95, 51, 184, .22) 1px, transparent 1.6px);
+  background-size: 26px 26px;
+  background-position: 0 var(--li-par, 0px);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(0, 0, 0, .35));
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, .9), rgba(0, 0, 0, .35));
+  opacity: .55;
+}
+.li-progress {
+  position: fixed; left: 0; top: 0; height: 3px; width: 100%; z-index: 2147483000;
+  background: linear-gradient(90deg, var(--li-glacier), #b394f0, var(--li-coral));
+  transform-origin: 0 50%; transform: scaleX(var(--li-progress, 0)); pointer-events: none;
+}
+
+@media (max-width: 767px) { .li-grain { opacity: .4; background-size: 22px 22px; } }
+@media (prefers-reduced-motion: reduce) {
+  .li-in, .li-hero-rise { animation: none !important; }
+  .li-wait { opacity: 1 !important; }
+  .li-ink { -webkit-text-stroke-width: 0; }
+  .li-card, .li-btn, .li-img, .li-pill { transition: none !important; }
+}
+@media print {
+  .li-grain, .li-progress { display: none !important; }
+  .li-wait { opacity: 1 !important; }
+}
+
+/* =====================================================================================
+ * Lilac Citrus effects. These override the shared base above; everything is paint only
+ * (opacity, translate, clip-path, shadows, backgrounds), so no box ever changes size or place.
+ *   motion      headings slide in from the left, cards spring up, photos open as a growing circle
+ *   type        a retro lime offset shadow behind display headings, popping in on reveal
+ *   hover       duotone (violet + lime) glow on cards, a soft pulse on buttons
+ *   atmosphere  slow-drifting violet and lime bokeh behind the page
+ * ===================================================================================== */
+:root { --li-pop: rgba(198, 232, 58, .95); --li-violet: #7b4bd6; --li-lime: #c6e83a; }
+
+/* type: retro offset shadow (persistent) */
+html body .li-ink.li-ink.li-ink { -webkit-text-stroke-width: 0 !important; text-shadow: .05em .05em 0 var(--li-pop); }
+@keyframes li-ink {
+  0%, 35% { text-shadow: 0 0 0 rgba(198, 232, 58, 0); }
+  100%    { text-shadow: .05em .05em 0 var(--li-pop); }
+}
+
+/* motion */
+.li-in.li-fx-rise { animation-duration: .9s; }
+.li-in.li-fx-up { animation-timing-function: cubic-bezier(.34, 1.56, .64, 1); animation-duration: .8s; }
+@keyframes li-focus {
+  from { opacity: 0; translate: -36px 0; filter: blur(3px); }
+  to   { opacity: 1; translate: 0 0; filter: none; }
+}
+@keyframes li-focus-up {
+  from { opacity: 0; translate: 0 34px; scale: .95; }
+  to   { opacity: 1; translate: 0 0; scale: 1; }
+}
+@keyframes li-focus-photo {
+  from { opacity: 0; clip-path: circle(0% at 50% 50%); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; clip-path: circle(75% at 50% 50%); }
+}
+
+/* hover: duotone glow on cards */
+.li-card.li-hot:hover {
+  translate: 0 -3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), -10px -8px 30px -16px rgba(123, 75, 214, .75),
+    10px 12px 30px -14px rgba(198, 232, 58, .9), 0 0 0 1px rgba(123, 75, 214, .35) !important;
+}
+.li-card { transition: box-shadow .45s var(--li-ease), translate .45s var(--li-ease), border-color .4s; }
+
+/* hover: buttons pulse */
+.li-btn:hover, #hwnav .hw-btn:hover, .elementor-button:hover, .hs-button:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+  animation: li-pulse 1.4s ease-out infinite;
+}
+@keyframes li-pulse {
+  0%   { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 0 0 0 rgba(123, 75, 214, .45), 0 14px 28px -14px rgba(123, 75, 214, .8); }
+  100% { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5), 0 0 0 12px rgba(123, 75, 214, 0), 0 14px 28px -14px rgba(123, 75, 214, .8); }
+}
+
+/* atmosphere: drifting bokeh instead of the dot grid */
+.li-grain {
+  -webkit-mask-image: none; mask-image: none; opacity: 1; mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(260px circle at 10% 20%, rgba(123, 75, 214, .10), transparent 70%),
+    radial-gradient(340px circle at 88% 28%, rgba(198, 232, 58, .16), transparent 70%),
+    radial-gradient(300px circle at 28% 86%, rgba(179, 148, 240, .13), transparent 70%),
+    radial-gradient(220px circle at 76% 78%, rgba(123, 75, 214, .09), transparent 70%);
+  background-size: 100% 100%;
+  background-position: 0 0, 0 0, 0 0, 0 0;
+  animation: li-bokeh 28s ease-in-out infinite alternate;
+}
+@keyframes li-bokeh { to { background-position: 60px -40px, -70px 50px, 50px 40px, -40px -60px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .li-grain, .li-btn:hover, .elementor-button:hover { animation: none !important; }
+  html body .li-ink.li-ink.li-ink { text-shadow: .05em .05em 0 var(--li-pop); }
+}
